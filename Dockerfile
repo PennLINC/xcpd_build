@@ -1,5 +1,5 @@
 
-FROM ubuntu:xenial-20200706
+FROM ubuntu:bionic-20220531
 
 COPY docker/files/neurodebian.gpg /usr/local/etc/neurodebian.gpg
 
@@ -167,7 +167,6 @@ RUN pip install --no-cache-dir "templateflow ~= 0.6.1 " && \
                 tfapi.get(template='fsLR',density='32k',desc='vaavg', suffix='midthickness',extension='.gii'); \
                 tfapi.get('fsLR', density='32k'); \
                  " && \
-    rm xcp_d-setup.cfg && \
     find $HOME/.cache/templateflow -type d -exec chmod go=u {} + && \
     find $HOME/.cache/templateflow -type f -exec chmod go=u {} +
 
