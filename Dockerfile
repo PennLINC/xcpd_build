@@ -39,6 +39,7 @@ RUN curl -sSL "http://neuro.debian.net/lists/$( lsb_release -c | cut -f2 ).us-ca
 
 
 RUN apt-get update && \
+    DEBIAN_FRONTEND=noninteractive \
     apt-get install -y --no-install-recommends \
                     fsl-core=5.0.9-5~nd18.04+1 \
                     fsl-mni152-templates=5.0.7-2 \
