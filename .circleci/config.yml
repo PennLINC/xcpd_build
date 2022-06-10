@@ -1,0 +1,34 @@
+version: 2.1
+
+jobs:
+
+  build:
+    environment:
+      TZ: "/usr/share/zoneinfo/America/New_York"
+    docker:
+      - image: cimg/base:2020.09
+    working_directory: /tmp/src/xcpd_build
+    steps:
+      - checkout
+      - setup_remote_docker:
+         version: 19.03.13
+      - run:
+          name: Build and push
+          no_output_timeout: 5h
+          command: |
+            if [[ -n "$CIRCLE_TAG" ]]; then
+              source setup_build.sh
+              do_build
+              docker login -u $DOCKER_USER -p $DOCKER_PASS
+              docker push pennbbl/xcpd_build:$CIRCLE_TAG
+            fi
+
+workflows:
+  version: 2
+  build_test_deploy:
+    jobs:
+
+      - build:
+          filters:
+            tags:
+              only: /.*/

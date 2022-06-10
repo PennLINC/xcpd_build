@@ -1,0 +1,9 @@
+**/.git
+**/.DS_Store
+**/*.log
+**/Thumbs.db
+.circleci
+.circleci/config.yml
+.gitignore
+LICENSE
+README.rst
