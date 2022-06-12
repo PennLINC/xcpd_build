@@ -44,7 +44,7 @@ RUN apt-get update && \
                     fsl-core=5.0.9-5~nd18.04+1 \
                     fsl-mni152-templates=5.0.7-2 \
                     afni=18.0.05+git24-gb25b21054~dfsg.1-1~nd17.10+1+nd18.04+1 \
-                    connectome-workbench=1.2.3+git41-gc4c6c90-2 \
+                    connectome-workbench=1.5.0-1~nd18.04+1 \
                     git-annex-standalone && \
     apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
