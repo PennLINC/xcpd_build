@@ -8,7 +8,6 @@ fi
 export BUILD_TAG
 
 # # Versions of the components
-# export TAG_FSL=22.2.0
 # export TAG_FREESURFER=22.2.0
 # export TAG_ANTS=22.2.6
 # export TAG_MRTRIX3=22.1.0
@@ -22,7 +21,6 @@ export BUILD_TAG
 # echo "----------"
 # echo ""
 # echo "BUILD_TAG=${BUILD_TAG}"
-# echo "TAG_FSL=${TAG_FSL}"
 # echo "TAG_FREESURFER=${TAG_FREESURFER}"
 # echo "TAG_ANTS=${TAG_ANTS}"
 # echo "TAG_MRTRIX3=${TAG_MRTRIX3}"

@@ -27,12 +27,6 @@ RUN apt-get update && \
                     nodejs && \
     apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-ENV FSL_DIR="/usr/share/fsl/5.0" \
-    OS="Linux" \
-    FS_OVERRIDE=0 \
-    FIX_VERTEX_AREA="" \
-    FSF_OUTPUT_FORMAT="nii.gz" 
-
 RUN echo "Downloading C3D ..." \
     && mkdir /opt/c3d \
     && curl -sSL --retry 5 https://sourceforge.net/projects/c3d/files/c3d/1.0.0/c3d-1.0.0-Linux-x86_64.tar.gz/download \
@@ -48,8 +42,6 @@ RUN curl -sSL "http://neuro.debian.net/lists/$( lsb_release -c | cut -f2 ).us-ca
 RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive \
     apt-get install -y --no-install-recommends \
-                    fsl-core=5.0.9-5~nd18.04+1 \
-                    fsl-mni152-templates=5.0.7-2 \
                     afni=18.0.05+git24-gb25b21054~dfsg.1-1~nd17.10+1+nd18.04+1 \
                     connectome-workbench=1.5.0-1~nd18.04+1 \
                     git-annex-standalone && \
@@ -85,24 +77,17 @@ ENV SUBJECTS_DIR="$FREESURFER_HOME/subjects" \
     MINC_BIN_DIR="$FREESURFER_HOME/mni/bin" \
     MINC_LIB_DIR="$FREESURFER_HOME/mni/lib" \
     MNI_DATAPATH="$FREESURFER_HOME/mni/data"
-    
+
 ENV PERL5LIB="$MINC_LIB_DIR/perl5/5.8.5" \
     MNI_PERL5LIB="$MINC_LIB_DIR/perl5/5.8.5" \
     PATH="$FREESURFER_HOME/bin:$FSFAST_HOME/bin:$FREESURFER_HOME/tktools:$MINC_BIN_DIR:$PATH"
 
 
-ENV FSLDIR="/usr/share/fsl/5.0" \
-    FSLOUTPUTTYPE="NIFTI_GZ" \
-    FSLMULTIFILEQUIT="TRUE" \
-    POSSUMDIR="/usr/share/fsl/5.0" \
-    LD_LIBRARY_PATH="/usr/lib/fsl/5.0:$LD_LIBRARY_PATH" \
-    FSLTCLSH="/usr/bin/tclsh" \
-    FSLWISH="/usr/bin/wish" \
-    AFNI_MODELPATH="/usr/lib/afni/models" \
+ENV AFNI_MODELPATH="/usr/lib/afni/models" \
     AFNI_IMSAVE_WARNINGS="NO" \
     AFNI_TTATLAS_DATASET="/usr/share/afni/atlases" \
     AFNI_PLUGINPATH="/usr/lib/afni/plugins"
-ENV PATH="/usr/lib/fsl/5.0:/usr/lib/afni/bin:$PATH"
+ENV PATH="/usr/lib/afni/bin:$PATH"
 
 
 ENV ANTSPATH=/usr/lib/ants
@@ -148,11 +133,11 @@ RUN conda install -y python=3.8 \
     chmod +x /usr/local/miniconda/bin/*; sync && \
     conda clean -y --all && sync && \
     rm -rf ~/.conda ~/.cache/pip/*; sync
-#RUN pip install numpy==1.18.1 
+#RUN pip install numpy==1.18.1
 # Unless otherwise specified each process should only use one thread - nipype
 # will handle parallelization
 ENV MKL_NUM_THREADS=1 \
-    OMP_NUM_THREADS=1 
+    OMP_NUM_THREADS=1
 
 # Create a shared $HOME directory
 
