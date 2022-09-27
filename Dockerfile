@@ -27,6 +27,9 @@ RUN apt-get update && \
                     nodejs && \
     apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
+ENV OS="Linux" \
+    FIX_VERTEX_AREA=""
+
 RUN echo "Downloading C3D ..." \
     && mkdir /opt/c3d \
     && curl -sSL --retry 5 https://sourceforge.net/projects/c3d/files/c3d/1.0.0/c3d-1.0.0-Linux-x86_64.tar.gz/download \
@@ -37,7 +40,6 @@ ENV C3DPATH=/opt/c3d/bin \
 RUN curl -sSL "http://neuro.debian.net/lists/$( lsb_release -c | cut -f2 ).us-ca.full" >> /etc/apt/sources.list.d/neurodebian.sources.list && \
     apt-key add /usr/local/etc/neurodebian.gpg && \
     (apt-key adv --refresh-keys --keyserver hkp://ha.pool.sks-keyservers.net 0xA5D32F012649A5A9 || true)
-
 
 RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive \
@@ -80,13 +82,13 @@ ENV SUBJECTS_DIR="$FREESURFER_HOME/subjects" \
 
 ENV PERL5LIB="$MINC_LIB_DIR/perl5/5.8.5" \
     MNI_PERL5LIB="$MINC_LIB_DIR/perl5/5.8.5" \
-    PATH="$FREESURFER_HOME/bin:$FSFAST_HOME/bin:$FREESURFER_HOME/tktools:$MINC_BIN_DIR:$PATH"
-
+    PATH="$FREESURFER_HOME/bin:$FREESURFER_HOME/tktools:$MINC_BIN_DIR:$PATH"
 
 ENV AFNI_MODELPATH="/usr/lib/afni/models" \
     AFNI_IMSAVE_WARNINGS="NO" \
     AFNI_TTATLAS_DATASET="/usr/share/afni/atlases" \
     AFNI_PLUGINPATH="/usr/lib/afni/plugins"
+
 ENV PATH="/usr/lib/afni/bin:$PATH"
 
 
