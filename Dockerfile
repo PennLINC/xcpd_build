@@ -105,14 +105,16 @@ RUN curl -sSL https://surfer.nmr.mgh.harvard.edu/pub/dist/freesurfer/6.0.1/frees
     --exclude='freesurfer/trctrain'
 
 ENV FREESURFER_HOME="/opt/freesurfer" \
-    FSF_OUTPUT_FORMAT="nii.gz" \
-    FUNCTIONALS_DIR="$FREESURFER_HOME/sessions" \
+    FSF_OUTPUT_FORMAT="nii.gz"
+
+ENV FUNCTIONALS_DIR="$FREESURFER_HOME/sessions" \
     LOCAL_DIR="$FREESURFER_HOME/local" \
     MINC_BIN_DIR="$FREESURFER_HOME/mni/bin" \
     MINC_LIB_DIR="$FREESURFER_HOME/mni/lib" \
     MNI_DIR="$FREESURFER_HOME/mni" \
-    MNI_DATAPATH="$FREESURFER_HOME/mni/data" \
-    MNI_PERL5LIB="$MINC_LIB_DIR/perl5/5.8.5" \
+    MNI_DATAPATH="$FREESURFER_HOME/mni/data"
+
+ENV MNI_PERL5LIB="$MINC_LIB_DIR/perl5/5.8.5" \
     PERL5LIB="$MINC_LIB_DIR/perl5/5.8.5" \
     SUBJECTS_DIR="$FREESURFER_HOME/subjects" \
     PATH="$FREESURFER_HOME/bin:$FREESURFER_HOME/tktools:$MINC_BIN_DIR:$PATH"
