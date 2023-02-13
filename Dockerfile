@@ -41,6 +41,40 @@ RUN curl -sSL "http://neuro.debian.net/lists/$( lsb_release -c | cut -f2 ).us-ca
     apt-key add /usr/local/etc/neurodebian.gpg && \
     (apt-key adv --refresh-keys --keyserver hkp://ha.pool.sks-keyservers.net 0xA5D32F012649A5A9 || true)
 
+
+# Install and setting up miniconda
+RUN curl -sSLO https://repo.continuum.io/miniconda/Miniconda3-py38_4.9.2-Linux-x86_64.sh && \
+    bash Miniconda3-py38_4.9.2-Linux-x86_64.sh -b -p /usr/local/miniconda && \
+    rm Miniconda3-py38_4.9.2-Linux-x86_64.sh
+
+# Set CPATH for packages relying on compiled libs (e.g. indexed_gzip)
+ENV PATH="/usr/local/miniconda/bin:$PATH" \
+    CPATH="/usr/local/miniconda/include:$CPATH" \
+    LANG="C.UTF-8" \
+    LC_ALL="C.UTF-8" \
+    PYTHONNOUSERSITE=1
+
+# Install precomputed python packages
+RUN conda install -y \
+        python=3.8 \
+        libxslt=1.1 \
+        matplotlib=3.3 \
+        mkl=2021.2 \
+        mkl-service=2.3 \
+        numpy=1.18.1 \
+        pandas=1.2 \
+        pip=21.0 \
+        scikit-learn=0.24 \
+        scipy=1.6 \
+        traits=6.2 \
+        zstd=1.4; \
+    sync && \
+    chmod -R a+rX /usr/local/miniconda; sync && \
+    chmod +x /usr/local/miniconda/bin/*; sync && \
+    conda clean -y --all; sync && \
+    conda clean -tipsy; sync && \
+    rm -rf ~/.conda ~/.cache/pip/*; sync
+
 RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive \
     apt-get install -y --no-install-recommends \
@@ -103,39 +137,6 @@ RUN npm install -g svgo
 
 # Install bids-validator
 RUN npm install -g bids-validator@1.8.0
-
-# Install and setting up miniconda
-RUN curl -sSLO https://repo.continuum.io/miniconda/Miniconda3-py38_4.9.2-Linux-x86_64.sh && \
-    bash Miniconda3-py38_4.9.2-Linux-x86_64.sh -b -p /usr/local/miniconda && \
-    rm Miniconda3-py38_4.9.2-Linux-x86_64.sh
-
-# Set CPATH for packages relying on compiled libs (e.g. indexed_gzip)
-ENV PATH="/usr/local/miniconda/bin:$PATH" \
-    CPATH="/usr/local/miniconda/include:$CPATH" \
-    LANG="C.UTF-8" \
-    LC_ALL="C.UTF-8" \
-    PYTHONNOUSERSITE=1
-
-# Install precomputed python packages
-RUN conda install -y \
-        python=3.8 \
-        libxslt=1.1 \
-        matplotlib=3.3 \
-        mkl=2021.2 \
-        mkl-service=2.3 \
-        numpy=1.18.1 \
-        pandas=1.2 \
-        pip=21.0 \
-        scikit-learn=0.24 \
-        scipy=1.6 \
-        traits=6.2 \
-        zstd=1.4; \
-    sync && \
-    chmod -R a+rX /usr/local/miniconda; sync && \
-    chmod +x /usr/local/miniconda/bin/*; sync && \
-    conda clean -y --all; sync && \
-    conda clean -tipsy; sync && \
-    rm -rf ~/.conda ~/.cache/pip/*; sync
 
 # Unless otherwise specified each process should only use one thread - nipype
 # will handle parallelization
