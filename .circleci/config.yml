@@ -7,7 +7,7 @@ jobs:
       TZ: "/usr/share/zoneinfo/America/New_York"
     docker:
       - image: cimg/base:2020.09
-    working_directory: /tmp/src/xcpd_build
+    working_directory: /tmp/src/xcp_d_build
     steps:
       - checkout
       - setup_remote_docker:
@@ -20,7 +20,7 @@ jobs:
               source setup_build.sh
               do_build
               docker login -u $DOCKER_USER -p $DOCKER_PASS
-              docker push pennbbl/xcpd_build:$CIRCLE_TAG
+              docker push pennlinc/xcp_d_build:$CIRCLE_TAG
             fi
 
 workflows:

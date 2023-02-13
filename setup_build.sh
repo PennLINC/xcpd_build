@@ -35,7 +35,7 @@ do_build() {
     DOCKER_BUILDKIT=1 \
     BUILDKIT_PROGRESS=plain \
     docker build -t \
-        pennbbl/xcpd_build:${BUILD_TAG} \
+        pennlinc/xcp_d_build:${BUILD_TAG} \
         .
 
 }
