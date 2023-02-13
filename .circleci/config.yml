@@ -19,7 +19,7 @@ jobs:
             if [[ -n "$CIRCLE_TAG" ]]; then
               source setup_build.sh
               do_build
-              docker login -u $DOCKER_USER -p $DOCKER_PASS
+              docker login -u $DOCKER_USER --password-stdin $DOCKER_PASS
               docker push pennbbl/xcpd_build:$CIRCLE_TAG
             fi
 
