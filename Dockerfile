@@ -90,7 +90,7 @@ ENV AFNI_MODELPATH="/usr/lib/afni/models" \
     PATH="/usr/lib/afni/bin:$PATH"
 
 # Install ANTS
-ENV ANTSPATH=/usr/lib/ants
+ENV ANTSPATH="/usr/lib/ants"
 RUN mkdir -p $ANTSPATH && \
     curl -sSL "https://dl.dropbox.com/s/gwf51ykkk5bifyj/ants-Linux-centos6_x86_64-v2.3.4.tar.gz" \
     | tar -xzC $ANTSPATH --strip-components 1
