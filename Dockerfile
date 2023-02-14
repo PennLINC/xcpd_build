@@ -63,7 +63,6 @@ RUN conda install -y \
         mkl-service=2.3 \
         numpy=1.18.1 \
         pandas=1.2 \
-        pip=21.0 \
         scikit-learn=0.24 \
         scipy=1.6 \
         traits=6.2 \
@@ -149,6 +148,9 @@ ENV MKL_NUM_THREADS=1 \
 RUN useradd -m -s /bin/bash -G users xcp_d
 WORKDIR /home/xcp_d
 ENV HOME="/home/xcp_d"
+
+# Update pip, which AFNI installs (probably)
+RUN pip install --no-cache-dir --upgrade pip
 
 # Precaching fonts, set 'Agg' as default backend for matplotlib
 RUN python -c "from matplotlib import font_manager" && \
