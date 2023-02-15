@@ -1,3 +1,4 @@
+FROM pennbbl/qsiprep-fsl:22.9.0 as build_fsl
 FROM ubuntu:bionic-20220531
 
 COPY docker/files/neurodebian.gpg /usr/local/etc/neurodebian.gpg
@@ -84,7 +85,6 @@ RUN apt-get update && \
     apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Install SLICER from FSL
-FROM pennbbl/qsiprep-fsl:22.9.0 as build_fsl
 COPY --from=build_fsl /opt/fsl-6.0.5.1/miscviz /opt/fsl-6.0.5.1/miscviz
 ENV FSLDIR="/opt/fsl-6.0.5.1" \
     FSLOUTPUTTYPE="NIFTI_GZ" \
