@@ -1,4 +1,4 @@
-FROM pennbbl/xcp_d:0.1.3 as build_fsl
+FROM pennlinc/xcp_d:0.1.3 as build_fsl
 FROM ubuntu:bionic-20220531
 
 COPY docker/files/neurodebian.gpg /usr/local/etc/neurodebian.gpg
