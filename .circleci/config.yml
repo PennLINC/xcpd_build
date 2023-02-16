@@ -10,6 +10,21 @@ jobs:
     working_directory: /tmp/src/xcp_d_build
     steps:
       - checkout
+      - run:
+          name: Build only
+          no_output_timeout: 5h
+          command: |
+            source setup_build.sh
+            do_build
+
+  build_and_deploy:
+    environment:
+      TZ: "/usr/share/zoneinfo/America/New_York"
+    docker:
+      - image: cimg/base:2020.09
+    working_directory: /tmp/src/xcp_d_build
+    steps:
+      - checkout
       - setup_remote_docker:
          version: 19.03.13
       - run:
@@ -27,8 +42,18 @@ workflows:
   version: 2
   build_test_deploy:
     jobs:
+      - build_and_deploy:
+          filters:
+            tags:
+              only: /.*/
 
+  build:
+    jobs:
       - build:
           filters:
+            branches:
+              ignore:
+                - /docs?\/.*/
+                - /tests?\/.*/
             tags:
               only: /.*/
