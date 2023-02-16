@@ -1,4 +1,4 @@
-FROM pennbbl/qsiprep-fsl:22.9.0 as build_fsl
+FROM pennbbl/xcp_d:0.1.3 as build_fsl
 FROM ubuntu:bionic-20220531
 
 COPY docker/files/neurodebian.gpg /usr/local/etc/neurodebian.gpg
@@ -85,16 +85,17 @@ RUN apt-get update && \
     apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Install SLICER from FSL
-COPY --from=build_fsl /opt/fsl-6.0.5.1/miscviz /opt/fsl-6.0.5.1/miscviz
-ENV FSLDIR="/opt/fsl-6.0.5.1" \
+COPY --from=build_fsl /usr/lib/fsl/5.0/slicer /usr/lib/fsl/5.0/slicer
+COPY --from=build_fsl /usr/lib/fsl/5.0/slicesdir /usr/lib/fsl/5.0/slicesdir
+ENV FSLDIR="/usr/lib/fsl/5.0" \
     FSLOUTPUTTYPE="NIFTI_GZ" \
     FSLMULTIFILEQUIT="TRUE" \
     FSLLOCKDIR="" \
     FSLMACHINELIST="" \
     FSLREMOTECALL="" \
     FSLGECUDAQ="cuda.q" \
-    LD_LIBRARY_PATH="/opt/fsl-6.0.5.1/lib:$LD_LIBRARY_PATH" \
-    PATH="/opt/fsl-6.0.5.1/bin:$PATH" \
+    LD_LIBRARY_PATH="/usr/lib/fsl/5.0:$LD_LIBRARY_PATH" \
+    PATH="/usr/lib/fsl/5.0:$PATH" \
     FSL_DEPS="libquadmath0"
 
 # Install FreeSurfer
