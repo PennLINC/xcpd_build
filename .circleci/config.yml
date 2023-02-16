@@ -10,6 +10,8 @@ jobs:
     working_directory: /tmp/src/xcp_d_build
     steps:
       - checkout
+      - setup_remote_docker:
+         version: 19.03.13
       - run:
           name: Build only
           no_output_timeout: 5h

@@ -1,8 +1,9 @@
+FROM pennlinc/xcp_d:0.1.3 as build_fsl
 FROM ubuntu:bionic-20220531
 
 COPY docker/files/neurodebian.gpg /usr/local/etc/neurodebian.gpg
 
-# Prepare environment
+# Install basic libraries
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
         apt-utils \
@@ -37,12 +38,12 @@ RUN echo "Downloading C3D ..." \
 ENV C3DPATH=/opt/c3d/bin \
     PATH=/opt/c3d/bin:$PATH
 
+# Set up NeuroDebian
 RUN curl -sSL "http://neuro.debian.net/lists/$( lsb_release -c | cut -f2 ).us-ca.full" >> /etc/apt/sources.list.d/neurodebian.sources.list && \
     apt-key add /usr/local/etc/neurodebian.gpg && \
     (apt-key adv --refresh-keys --keyserver hkp://ha.pool.sks-keyservers.net 0xA5D32F012649A5A9 || true)
 
-
-# Install and setting up miniconda
+# Install and set up miniconda
 RUN curl -sSLO https://repo.continuum.io/miniconda/Miniconda3-py38_4.9.2-Linux-x86_64.sh && \
     bash Miniconda3-py38_4.9.2-Linux-x86_64.sh -b -p /usr/local/miniconda && \
     rm Miniconda3-py38_4.9.2-Linux-x86_64.sh
@@ -74,6 +75,7 @@ RUN conda install -y \
     conda clean -tipsy; sync && \
     rm -rf ~/.conda ~/.cache/pip/*; sync
 
+# Install AFNI, Connectome Workbench, and git-annex
 RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive \
     apt-get install -y --no-install-recommends \
@@ -81,6 +83,20 @@ RUN apt-get update && \
         connectome-workbench=1.5.0-1~nd18.04+1 \
         git-annex-standalone && \
     apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+# Install SLICER from FSL
+COPY --from=build_fsl /usr/lib/fsl/5.0/slicer /usr/lib/fsl/5.0/slicer
+COPY --from=build_fsl /usr/lib/fsl/5.0/slicesdir /usr/lib/fsl/5.0/slicesdir
+ENV FSLDIR="/usr/lib/fsl/5.0" \
+    FSLOUTPUTTYPE="NIFTI_GZ" \
+    FSLMULTIFILEQUIT="TRUE" \
+    FSLLOCKDIR="" \
+    FSLMACHINELIST="" \
+    FSLREMOTECALL="" \
+    FSLGECUDAQ="cuda.q" \
+    LD_LIBRARY_PATH="/usr/lib/fsl/5.0:$LD_LIBRARY_PATH" \
+    PATH="/usr/lib/fsl/5.0:$PATH" \
+    FSL_DEPS="libquadmath0"
 
 # Install FreeSurfer
 RUN curl -sSL https://surfer.nmr.mgh.harvard.edu/pub/dist/freesurfer/6.0.1/freesurfer-Linux-centos6_x86_64-stable-pub-v6.0.1.tar.gz | tar zxv --no-same-owner -C /opt \
