@@ -12,6 +12,7 @@ RUN apt-get update && \
         bzip2 \
         ca-certificates \
         curl \
+        dc \
         git \
         graphviz \
         libtool \
