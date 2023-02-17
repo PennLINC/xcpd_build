@@ -12,6 +12,7 @@ RUN apt-get update && \
         bzip2 \
         ca-certificates \
         curl \
+        dc \
         git \
         graphviz \
         libtool \
@@ -87,6 +88,8 @@ RUN apt-get update && \
 # Install SLICER from FSL
 COPY --from=build_fsl /usr/lib/fsl/5.0/slicer /usr/lib/fsl/5.0/slicer
 COPY --from=build_fsl /usr/lib/fsl/5.0/slicesdir /usr/lib/fsl/5.0/slicesdir
+COPY --from=build_fsl /usr/lib/fsl/5.0/pngappend /usr/lib/fsl/5.0/pngappend
+COPY --from=build_fsl /usr/lib/fsl/5.0/remove_ext /usr/lib/fsl/5.0/remove_ext
 ENV FSLDIR="/usr/lib/fsl/5.0" \
     FSLOUTPUTTYPE="NIFTI_GZ" \
     FSLMULTIFILEQUIT="TRUE" \
