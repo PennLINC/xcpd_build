@@ -87,6 +87,7 @@ RUN apt-get update && \
 # Install SLICER from FSL
 COPY --from=build_fsl /usr/lib/fsl/5.0/slicer /usr/lib/fsl/5.0/slicer
 COPY --from=build_fsl /usr/lib/fsl/5.0/slicesdir /usr/lib/fsl/5.0/slicesdir
+COPY --from=build_fsl /usr/lib/fsl/5.0/pngappend /usr/lib/fsl/5.0/pngappend
 ENV FSLDIR="/usr/lib/fsl/5.0" \
     FSLOUTPUTTYPE="NIFTI_GZ" \
     FSLMULTIFILEQUIT="TRUE" \
