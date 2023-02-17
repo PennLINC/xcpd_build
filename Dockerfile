@@ -86,19 +86,23 @@ RUN apt-get update && \
     apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Install SLICER from FSL
-COPY --from=build_fsl /usr/lib/fsl/5.0/slicer /usr/lib/fsl/5.0/slicer
-COPY --from=build_fsl /usr/lib/fsl/5.0/slicesdir /usr/lib/fsl/5.0/slicesdir
-COPY --from=build_fsl /usr/lib/fsl/5.0/pngappend /usr/lib/fsl/5.0/pngappend
-COPY --from=build_fsl /usr/lib/fsl/5.0/remove_ext /usr/lib/fsl/5.0/remove_ext
-ENV FSLDIR="/usr/lib/fsl/5.0" \
+COPY --from=build_fsl /usr/lib/fsl/5.0/slicer /opt/fsl/lib/slicer
+COPY --from=build_fsl /usr/lib/fsl/5.0/slicesdir /opt/fsl/lib/slicesdir
+COPY --from=build_fsl /usr/lib/fsl/5.0/pngappend /opt/fsl/lib/pngappend
+COPY --from=build_fsl /usr/lib/fsl/5.0/remove_ext /opt/fsl/lib/remove_ext
+COPY --from=build_fsl /usr/bin/fsl5.0-slicer /opt/fsl/bin/fsl-5.0-slicer
+COPY --from=build_fsl /usr/bin/fsl5.0-slicesdir /opt/fsl/bin/fsl5.0-slicesdir
+COPY --from=build_fsl /usr/bin/fsl5.0-pngappend /opt/fsl/bin/fsl5.0-pngappend
+COPY --from=build_fsl /usr/bin/fsl5.0-remove_ext /opt/fsl/bin/fsl5.0-remove_ext
+ENV FSLDIR="/opt/fsl/lib" \
     FSLOUTPUTTYPE="NIFTI_GZ" \
     FSLMULTIFILEQUIT="TRUE" \
     FSLLOCKDIR="" \
     FSLMACHINELIST="" \
     FSLREMOTECALL="" \
     FSLGECUDAQ="cuda.q" \
-    LD_LIBRARY_PATH="/usr/lib/fsl/5.0:$LD_LIBRARY_PATH" \
-    PATH="/usr/lib/fsl/5.0:$PATH" \
+    LD_LIBRARY_PATH="/opt/fsl/lib:$LD_LIBRARY_PATH" \
+    PATH="/opt/fsl:$PATH" \
     FSL_DEPS="libquadmath0"
 
 # Install FreeSurfer
