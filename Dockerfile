@@ -89,10 +89,7 @@ RUN apt-get update && \
 COPY --from=build_fsl /usr/lib/fsl/5.0/slicer /usr/lib/fsl/5.0/slicer
 COPY --from=build_fsl /usr/lib/fsl/5.0/slicesdir /usr/lib/fsl/5.0/slicesdir
 COPY --from=build_fsl /usr/lib/fsl/5.0/pngappend /usr/lib/fsl/5.0/pngappend
-COPY --from=build_fsl /usr/lib/fsl/5.0/bin/remove_ext /usr/lib/fsl/5.0/bin/remove_ext
-COPY --from=build_fsl /usr/lib/fsl/5.0/bin/slicer /usr/lib/fsl/5.0/bin/slicer
-COPY --from=build_fsl /usr/lib/fsl/5.0/bin/pngappend /usr/lib/fsl/5.0/bin/pngappend
-COPY --from=build_fsl /usr/lib/fsl/5.0/bin/slicesdir /usr/lib/fsl/5.0/bin/slicesdir
+COPY --from=build_fsl /usr/lib/fsl/5.0/remove_ext /usr/lib/fsl/5.0/remove_ext
 ENV FSLDIR="/usr/lib/fsl/5.0" \
     FSLOUTPUTTYPE="NIFTI_GZ" \
     FSLMULTIFILEQUIT="TRUE" \
