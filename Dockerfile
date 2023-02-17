@@ -94,6 +94,8 @@ COPY --from=build_fsl /usr/bin/fsl5.0-slicer /opt/fsl/bin/fsl-5.0-slicer
 COPY --from=build_fsl /usr/bin/fsl5.0-slicesdir /opt/fsl/bin/fsl5.0-slicesdir
 COPY --from=build_fsl /usr/bin/fsl5.0-pngappend /opt/fsl/bin/fsl5.0-pngappend
 COPY --from=build_fsl /usr/bin/fsl5.0-remove_ext /opt/fsl/bin/fsl5.0-remove_ext
+COPY --from=build_fsl /usr/lib/fsl/5.0/libnewimage.so /opt/fsl/lib/libnewimage.so
+COPY --from=build_fsl /usr/lib/fsl/5.0/libmiscmaths.so /opt/fsl/lib/libmiscmaths.so
 ENV FSLDIR="/opt/fsl/lib" \
     FSLOUTPUTTYPE="NIFTI_GZ" \
     FSLMULTIFILEQUIT="TRUE" \
@@ -102,8 +104,8 @@ ENV FSLDIR="/opt/fsl/lib" \
     FSLREMOTECALL="" \
     FSLGECUDAQ="cuda.q" \
     LD_LIBRARY_PATH="/opt/fsl/lib:$LD_LIBRARY_PATH" \
-    PATH="/opt/fsl:$PATH" \
-    FSL_DEPS="libquadmath0"
+    PATH="/opt/fsl/lib:/opt/fsl/bin:$PATH" \
+    FSL_DEPS="libquadmath0;libnewimage.so;libmiscmaths.so"
 
 # Install FreeSurfer
 RUN curl -sSL https://surfer.nmr.mgh.harvard.edu/pub/dist/freesurfer/6.0.1/freesurfer-Linux-centos6_x86_64-stable-pub-v6.0.1.tar.gz | tar zxv --no-same-owner -C /opt \
