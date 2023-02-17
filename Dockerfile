@@ -90,16 +90,20 @@ COPY --from=build_fsl /usr/lib/fsl/5.0/slicer /opt/fsl/lib/slicer
 COPY --from=build_fsl /usr/lib/fsl/5.0/slicesdir /opt/fsl/lib/slicesdir
 COPY --from=build_fsl /usr/lib/fsl/5.0/pngappend /opt/fsl/lib/pngappend
 COPY --from=build_fsl /usr/lib/fsl/5.0/remove_ext /opt/fsl/lib/remove_ext
+# Binaries
 COPY --from=build_fsl /usr/bin/fsl5.0-slicer /opt/fsl/bin/fsl-5.0-slicer
 COPY --from=build_fsl /usr/bin/fsl5.0-slicesdir /opt/fsl/bin/fsl5.0-slicesdir
 COPY --from=build_fsl /usr/bin/fsl5.0-pngappend /opt/fsl/bin/fsl5.0-pngappend
 COPY --from=build_fsl /usr/bin/fsl5.0-remove_ext /opt/fsl/bin/fsl5.0-remove_ext
-COPY --from=build_fsl /usr/lib/fsl/5.0/libnewimage.so /opt/fsl/lib/libnewimage.so
-COPY --from=build_fsl /usr/lib/fsl/5.0/libmiscmaths.so /opt/fsl/lib/libmiscmaths.so
 COPY --from=build_fsl /usr/share/fsl/5.0/bin/slicer /opt/fsl/bin/slicer
 COPY --from=build_fsl /usr/share/fsl/5.0/bin/slicesdir /opt/fsl/bin/slicesdir
 COPY --from=build_fsl /usr/share/fsl/5.0/bin/pngappend /opt/fsl/bin/pngappend
 COPY --from=build_fsl /usr/share/fsl/5.0/bin/remove_ext /opt/fsl/bin/remove_ext
+# Shared libraries
+COPY --from=build_fsl /usr/lib/fsl/5.0/libnewimage.so /opt/fsl/lib/libnewimage.so
+COPY --from=build_fsl /usr/lib/fsl/5.0/libmiscmaths.so /opt/fsl/lib/libmiscmaths.so
+COPY --from=build_fsl /usr/lib/fsl/5.0/libmiscpic.so /opt/fsl/lib/libmiscpic.so
+COPY --from=build_fsl /usr/lib/libnewmat.so.10.0.0 /opt/fsl/lib/libnewmat.so
 ENV FSLDIR="/opt/fsl" \
     FSLOUTPUTTYPE="NIFTI_GZ" \
     FSLMULTIFILEQUIT="TRUE" \
