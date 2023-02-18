@@ -105,6 +105,7 @@ COPY --from=build_fsl /usr/lib/fsl/5.0/libmiscmaths.so /opt/fsl/lib/libmiscmaths
 COPY --from=build_fsl /usr/lib/fsl/5.0/libmiscpic.so /opt/fsl/lib/libmiscpic.so
 COPY --from=build_fsl /usr/lib/fsl/5.0/libfslio.so /opt/fsl/lib/libfslio.so
 COPY --from=build_fsl /usr/lib/fsl/5.0/libutils.so /opt/fsl/lib/libutils.so
+COPY --from=build_fsl /usr/lib/fsl/5.0/libprob.so /opt/fsl/lib/libprob.so
 COPY --from=build_fsl /usr/lib/libnewmat.so.10.0.0 /opt/fsl/lib/libnewmat.so.10
 ENV FSLDIR="/opt/fsl" \
     FSLOUTPUTTYPE="NIFTI_GZ" \
