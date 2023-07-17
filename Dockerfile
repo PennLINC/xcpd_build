@@ -5,11 +5,11 @@ FROM ubuntu:bionic-20220531
 COPY docker/files/neurodebian.gpg /usr/local/etc/neurodebian.gpg
 
 # Download atlases from AtlasPack
-RUN mkdir /atlaspack
-COPY --from=atlaspack /AtlasPack/tpl-fsLR_*.dlabel.nii /atlaspack/
-COPY --from=atlaspack /AtlasPack/tpl-MNI152NLin6Asym_*.nii.gz /atlaspack/
-COPY --from=atlaspack /AtlasPack/atlas-4S*.tsv /atlaspack/
-COPY --from=atlaspack /AtlasPack/*.json /atlaspack/
+RUN mkdir /AtlasPack
+COPY --from=atlaspack /AtlasPack/tpl-fsLR_*.dlabel.nii /AtlasPack/
+COPY --from=atlaspack /AtlasPack/tpl-MNI152NLin6Asym_*.nii.gz /AtlasPack/
+COPY --from=atlaspack /AtlasPack/atlas-4S*.tsv /AtlasPack/
+COPY --from=atlaspack /AtlasPack/*.json /AtlasPack/
 
 # Install basic libraries
 RUN apt-get update && \
