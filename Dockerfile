@@ -128,24 +128,24 @@ ENV FSLDIR="/opt/fsl" \
 
 # Install FreeSurfer
 RUN curl -sSL https://surfer.nmr.mgh.harvard.edu/pub/dist/freesurfer/6.0.1/freesurfer-Linux-centos6_x86_64-stable-pub-v6.0.1.tar.gz | tar zxv --no-same-owner -C /opt \
-    --exclude='freesurfer/diffusion' \
-    --exclude='freesurfer/docs' \
-    --exclude='freesurfer/fsfast' \
-    --exclude='freesurfer/lib/cuda' \
-    --exclude='freesurfer/lib/qt' \
-    --exclude='freesurfer/matlab' \
-    --exclude='freesurfer/mni/share/man' \
-    --exclude='freesurfer/subjects/fsaverage_sym' \
-    --exclude='freesurfer/subjects/fsaverage3' \
-    --exclude='freesurfer/subjects/fsaverage4' \
-    --exclude='freesurfer/subjects/cvs_avg35' \
-    --exclude='freesurfer/subjects/cvs_avg35_inMNI152' \
-    --exclude='freesurfer/subjects/bert' \
-    --exclude='freesurfer/subjects/lh.EC_average' \
-    --exclude='freesurfer/subjects/rh.EC_average' \
-    --exclude='freesurfer/subjects/sample-*.mgz' \
-    --exclude='freesurfer/subjects/V1_average' \
-    --exclude='freesurfer/trctrain'
+    --exclude="freesurfer/diffusion" \
+    --exclude="freesurfer/docs" \
+    --exclude="freesurfer/fsfast" \
+    --exclude="freesurfer/lib/cuda" \
+    --exclude="freesurfer/lib/qt" \
+    --exclude="freesurfer/matlab" \
+    --exclude="freesurfer/mni/share/man" \
+    --exclude="freesurfer/subjects/fsaverage_sym" \
+    --exclude="freesurfer/subjects/fsaverage3" \
+    --exclude="freesurfer/subjects/fsaverage4" \
+    --exclude="freesurfer/subjects/cvs_avg35" \
+    --exclude="freesurfer/subjects/cvs_avg35_inMNI152" \
+    --exclude="freesurfer/subjects/bert" \
+    --exclude="freesurfer/subjects/lh.EC_average" \
+    --exclude="freesurfer/subjects/rh.EC_average" \
+    --exclude="freesurfer/subjects/sample-*.mgz" \
+    --exclude="freesurfer/subjects/V1_average" \
+    --exclude="freesurfer/trctrain"
 
 ENV FREESURFER_HOME="/opt/freesurfer" \
     FSF_OUTPUT_FORMAT="nii.gz"
@@ -196,7 +196,7 @@ ENV HOME="/home/xcp_d"
 # Update pip, which AFNI installs (probably)
 RUN pip install --no-cache-dir --upgrade pip
 
-# Precaching fonts, set 'Agg' as default backend for matplotlib
+# Precaching fonts, set "Agg" as default backend for matplotlib
 RUN python -c "from matplotlib import font_manager" && \
     sed -i 's/\(backend *: \).*$/\1Agg/g' $( python -c "import matplotlib; print(matplotlib.matplotlib_fname())" )
 
