@@ -1,7 +1,15 @@
 FROM pennlinc/xcp_d:0.1.3 as build_fsl
+from pennlinc/atlaspack:0.0.3 as atlaspack
 FROM ubuntu:bionic-20220531
 
 COPY docker/files/neurodebian.gpg /usr/local/etc/neurodebian.gpg
+
+# Download atlases from AtlasPack
+RUN mkdir /atlaspack
+COPY --from=atlaspack /AtlasPack/tpl-fsLR_*.dlabel.nii /atlaspack/
+COPY --from=atlaspack /AtlasPack/tpl-MNI152NLin6Asym_*.nii.gz /atlaspack/
+COPY --from=atlaspack /AtlasPack/atlas-4S*.tsv /atlaspack/
+COPY --from=atlaspack /AtlasPack/*.json /atlaspack/
 
 # Install basic libraries
 RUN apt-get update && \
