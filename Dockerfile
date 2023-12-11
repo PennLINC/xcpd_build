@@ -53,9 +53,9 @@ RUN curl -sSL "http://neuro.debian.net/lists/$( lsb_release -c | cut -f2 ).us-ca
     (apt-key adv --refresh-keys --keyserver hkp://ha.pool.sks-keyservers.net 0xA5D32F012649A5A9 || true)
 
 # Install and set up miniconda
-RUN curl -sSLO https://repo.continuum.io/miniconda/Miniconda3-py38_4.9.2-Linux-x86_64.sh && \
-    bash Miniconda3-py38_4.9.2-Linux-x86_64.sh -b -p /usr/local/miniconda && \
-    rm Miniconda3-py38_4.9.2-Linux-x86_64.sh
+RUN curl -sSLO https://repo.continuum.io/miniconda/Miniconda3-py310_23.10.0-1-Linux-x86_64.sh && \
+    bash Miniconda3-py310_23.10.0-1-Linux-x86_64.sh -b -p /usr/local/miniconda && \
+    rm Miniconda3-py310_23.10.0-1-Linux-x86_64.sh
 
 # Set CPATH for packages relying on compiled libs (e.g. indexed_gzip)
 ENV PATH="/usr/local/miniconda/bin:$PATH" \
@@ -66,7 +66,7 @@ ENV PATH="/usr/local/miniconda/bin:$PATH" \
 
 # Install precomputed python packages
 RUN conda install -y \
-        python=3.8 \
+        python=3.10 \
         libxslt=1.1 \
         matplotlib=3.3 \
         mkl=2021.2 \
@@ -201,7 +201,7 @@ RUN python -c "from matplotlib import font_manager" && \
     sed -i 's/\(backend *: \).*$/\1Agg/g' $( python -c "import matplotlib; print(matplotlib.matplotlib_fname())" )
 
 # Precaching atlases: UPDATE TEMPLATEFLOW VERSION TO MATCH XCP_D
-RUN pip install --no-cache-dir "templateflow ~= 0.8.1 " && \
+RUN pip install --no-cache-dir "templateflow " && \
     python -c "from templateflow import api as tfapi; \
                tfapi.get('MNI152NLin2009cAsym', resolution=2, suffix='T1w', desc=None); \
                 tfapi.get(template='MNI152NLin6Asym',resolution=2, suffix='T1w'); \
