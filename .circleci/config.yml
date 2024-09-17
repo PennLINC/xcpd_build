@@ -28,7 +28,7 @@ jobs:
     steps:
       - checkout
       - setup_remote_docker:
-         version: 19.03.13
+         version: docker24
       - run:
           name: Build and push
           no_output_timeout: 5h
