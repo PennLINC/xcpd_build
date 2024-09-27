@@ -204,13 +204,10 @@ ENV HOME="/home/xcp_d"
 RUN python -c "from matplotlib import font_manager" && \
     sed -i 's/\(backend *: \).*$/\1Agg/g' $( python -c "import matplotlib; print(matplotlib.matplotlib_fname())" )
 
-# Precaching atlases: UPDATE TEMPLATEFLOW VERSION TO MATCH XCP_D
-RUN python -c "from templateflow import api as tfapi; \
-               tfapi.get('MNI152NLin2009cAsym', resolution=2, suffix='T1w', desc=None); \
-               tfapi.get(template='MNI152NLin6Asym', resolution=2, suffix='T1w'); \
-               tfapi.get('MNI152NLin2009cAsym', resolution=1, desc='carpet',suffix='dseg'); \
-               tfapi.get(template='MNI152NLin2009cAsym', mode='image', suffix='xfm', extension='.h5'); \
-               tfapi.get('fsLR', density='32k');" && \
+# Precaching templates
+COPY scripts/fetch_templates.py fetch_templates.py
+RUN python fetch_templates.py && \
+    rm fetch_templates.py && \
     find $HOME/.cache/templateflow -type d -exec chmod go=u {} + && \
     find $HOME/.cache/templateflow -type f -exec chmod go=u {} +
 
