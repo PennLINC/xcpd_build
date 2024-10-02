@@ -80,22 +80,43 @@ RUN curl -sSL "http://neuro.debian.net/lists/$( lsb_release -c | cut -f2 ).us-ca
     apt-key add /usr/local/etc/neurodebian.gpg && \
     (apt-key adv --refresh-keys --keyserver hkp://ha.pool.sks-keyservers.net 0xA5D32F012649A5A9 || true)
 
-# Install AFNI, Connectome Workbench, and git-annex
+# Install Connectome Workbench and git-annex
 RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive \
     apt-get install -y --no-install-recommends \
-        afni \
         connectome-workbench \
         git-annex-standalone && \
     apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
+# Install AFNI latest (neurodocker build)
+RUN apt-get update -qq \
+&& apt-get install -y -q --no-install-recommends \
+       apt-utils \
+       ed \
+       gsl-bin \
+       curl \
+       libglib2.0-0 \
+       libglu1-mesa-dev \
+       libglw1-mesa \
+       libgomp1 \
+       libjpeg62 \
+       libxm4 \
+       netpbm \
+       tcsh \
+       xfonts-base \
+       xvfb \
+&& echo "Downloading AFNI ..." \
+&& mkdir -p /opt/afni-latest \
+&& curl -fsSL --retry 5 https://afni.nimh.nih.gov/pub/dist/tgz/linux_openmp_64.tgz \
+| tar -xz -C /opt/afni-latest --strip-components 1
+
 # Configure AFNI
-ENV AFNI_MODELPATH="/usr/lib/afni/models" \
+ENV AFNI_MODELPATH="/opt/afni-latest/models" \
     AFNI_IMSAVE_WARNINGS="NO" \
     AFNI_TTATLAS_DATASET="/usr/share/afni/atlases" \
-    AFNI_PLUGINPATH="/usr/lib/afni/plugins"
+    AFNI_PLUGINPATH="/opt/afni-latest/plugins"
 
-ENV PATH="/usr/lib/afni/bin:$PATH"
+ENV PATH="/opt/afni-latest/bin:$PATH"
 
 RUN echo "Downloading C3D ..." \
     && mkdir /opt/c3d \
