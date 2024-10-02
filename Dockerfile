@@ -25,6 +25,7 @@ RUN apt-get update && \
         graphviz \
         libtool \
         locales \
+        lsb_release \
         pandoc \
         pandoc-citeproc \
         pkg-config \
