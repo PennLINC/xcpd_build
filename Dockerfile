@@ -1,6 +1,6 @@
 FROM pennlinc/xcp_d:0.1.3 as build_fsl
 FROM pennlinc/atlaspack:0.1.0 as atlaspack
-FROM ubuntu:bionic-20220531
+FROM ubuntu:jammy-20240911.1
 
 COPY docker/files/neurodebian.gpg /usr/local/etc/neurodebian.gpg
 
@@ -25,6 +25,7 @@ RUN apt-get update && \
         graphviz \
         libtool \
         locales \
+        lsb-release \
         pandoc \
         pandoc-citeproc \
         pkg-config \
@@ -32,7 +33,7 @@ RUN apt-get update && \
         wget \
         xvfb \
         && \
-    curl -sSL https://deb.nodesource.com/setup_17.x | bash - && \
+    curl -sSL https://deb.nodesource.com/setup_21.x | bash - && \
     apt-get install -y --no-install-recommends \
         nodejs && \
     apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
@@ -72,30 +73,50 @@ RUN conda install -y \
     sync && \
     chmod -R a+rX /usr/local/miniconda; sync && \
     chmod +x /usr/local/miniconda/bin/*; sync && \
-    conda build purge-all; sync && \
-    conda clean -tipsy; sync
+    conda clean --all; sync
 
 # Set up NeuroDebian
 RUN curl -sSL "http://neuro.debian.net/lists/$( lsb_release -c | cut -f2 ).us-ca.full" >> /etc/apt/sources.list.d/neurodebian.sources.list && \
     apt-key add /usr/local/etc/neurodebian.gpg && \
     (apt-key adv --refresh-keys --keyserver hkp://ha.pool.sks-keyservers.net 0xA5D32F012649A5A9 || true)
 
-# Install AFNI, Connectome Workbench, and git-annex
+# Install Connectome Workbench and git-annex
 RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive \
     apt-get install -y --no-install-recommends \
-        afni=18.0.05+git24-gb25b21054~dfsg.1-1~nd17.10+1+nd18.04+1 \
-        connectome-workbench=2.0.0-1~nd120+1 \
+        connectome-workbench \
         git-annex-standalone && \
     apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
+# Install AFNI latest (neurodocker build)
+RUN apt-get update -qq \
+&& apt-get install -y -q --no-install-recommends \
+       apt-utils \
+       ed \
+       gsl-bin \
+       curl \
+       libglib2.0-0 \
+       libglu1-mesa-dev \
+       libglw1-mesa \
+       libgomp1 \
+       libjpeg62 \
+       libxm4 \
+       netpbm \
+       tcsh \
+       xfonts-base \
+       xvfb \
+&& echo "Downloading AFNI ..." \
+&& mkdir -p /opt/afni-latest \
+&& curl -fsSL --retry 5 https://afni.nimh.nih.gov/pub/dist/tgz/linux_openmp_64.tgz \
+| tar -xz -C /opt/afni-latest --strip-components 1
+
 # Configure AFNI
-ENV AFNI_MODELPATH="/usr/lib/afni/models" \
+ENV AFNI_MODELPATH="/opt/afni-latest/models" \
     AFNI_IMSAVE_WARNINGS="NO" \
     AFNI_TTATLAS_DATASET="/usr/share/afni/atlases" \
-    AFNI_PLUGINPATH="/usr/lib/afni/plugins"
+    AFNI_PLUGINPATH="/opt/afni-latest/plugins"
 
-ENV PATH="/usr/lib/afni/bin:$PATH"
+ENV PATH="/opt/afni-latest/bin:$PATH"
 
 RUN echo "Downloading C3D ..." \
     && mkdir /opt/c3d \
@@ -143,8 +164,9 @@ ENV FSLDIR="/opt/fsl" \
 # Install ANTS
 ENV ANTSPATH="/usr/lib/ants"
 RUN mkdir -p $ANTSPATH && \
-    curl -sSL "https://dl.dropbox.com/s/gwf51ykkk5bifyj/ants-Linux-centos6_x86_64-v2.3.4.tar.gz" \
-    | tar -xzC $ANTSPATH --strip-components 1
+    curl -sSL "https://github.com/ANTsX/ANTs/releases/download/v2.5.3/ants-2.5.3-ubuntu-22.04-X64-gcc.zip" -o /tmp/ants.zip && \
+    unzip /tmp/ants.zip -d $ANTSPATH && \
+    rm /tmp/ants.zip
 ENV PATH=$ANTSPATH:$PATH
 
 # Install SVGO
