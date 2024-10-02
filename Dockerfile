@@ -72,8 +72,7 @@ RUN conda install -y \
     sync && \
     chmod -R a+rX /usr/local/miniconda; sync && \
     chmod +x /usr/local/miniconda/bin/*; sync && \
-    conda build purge-all; sync && \
-    conda clean -tipsy; sync
+    conda clean --all; sync
 
 # Set up NeuroDebian
 RUN curl -sSL "http://neuro.debian.net/lists/$( lsb_release -c | cut -f2 ).us-ca.full" >> /etc/apt/sources.list.d/neurodebian.sources.list && \
@@ -85,7 +84,7 @@ RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive \
     apt-get install -y --no-install-recommends \
         afni=18.0.05+git24-gb25b21054~dfsg.1-1~nd17.10+1+nd18.04+1 \
-        connectome-workbench \
+        connectome-workbench=2.0.0-2~nd18.04+1 \
         git-annex-standalone && \
     apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
@@ -179,8 +178,8 @@ ENV MNI_PERL5LIB="$MINC_LIB_DIR/perl5/5.8.5" \
 # Install ANTS
 ENV ANTSPATH="/usr/lib/ants"
 RUN mkdir -p $ANTSPATH && \
-    curl -sSL "https://dl.dropbox.com/s/gwf51ykkk5bifyj/ants-Linux-centos6_x86_64-v2.3.4.tar.gz" \
-    | tar -xzC $ANTSPATH --strip-components 1
+    curl -sSL "https://github.com/ANTsX/ANTs/releases/download/v2.5.3/ants-2.5.3-ubuntu-22.04-X64-gcc.zip" \
+    | unzip $ANTSPATH --strip-components 1
 ENV PATH=$ANTSPATH:$PATH
 
 # Install SVGO
