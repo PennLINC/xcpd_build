@@ -1,6 +1,6 @@
 FROM pennlinc/xcp_d:0.1.3 as build_fsl
 FROM pennlinc/atlaspack:0.1.0 as atlaspack
-FROM ubuntu:bionic-20220531
+FROM ubuntu:jammy-20240911.1
 
 COPY docker/files/neurodebian.gpg /usr/local/etc/neurodebian.gpg
 
