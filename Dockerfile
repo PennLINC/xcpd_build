@@ -200,8 +200,9 @@ ENV MNI_PERL5LIB="$MINC_LIB_DIR/perl5/5.8.5" \
 # Install ANTS
 ENV ANTSPATH="/usr/lib/ants"
 RUN mkdir -p $ANTSPATH && \
-    curl -sSL "https://github.com/ANTsX/ANTs/releases/download/v2.5.3/ants-2.5.3-ubuntu-22.04-X64-gcc.zip" \
-    | unzip $ANTSPATH --strip-components 1
+    curl -sSL "https://github.com/ANTsX/ANTs/releases/download/v2.5.3/ants-2.5.3-ubuntu-22.04-X64-gcc.zip" -o /tmp/ants.zip && \
+    unzip /tmp/ants.zip -d $ANTSPATH && \
+    rm /tmp/ants.zip
 ENV PATH=$ANTSPATH:$PATH
 
 # Install SVGO
