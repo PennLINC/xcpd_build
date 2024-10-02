@@ -11,9 +11,6 @@ COPY --from=atlaspack /AtlasPack/tpl-MNI152NLin6Asym_*.nii.gz /AtlasPack/
 COPY --from=atlaspack /AtlasPack/atlas-4S*.tsv /AtlasPack/
 COPY --from=atlaspack /AtlasPack/*.json /AtlasPack/
 
-# Write dataset_description.json
-RUN echo '{"Name": "AtlasPack", "BIDSVersion": "1.0.0", "DatasetType": "atlas"}' >> /AtlasPack/dataset_description.json
-
 # Install basic libraries
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
@@ -114,12 +111,9 @@ RUN apt-get update -qq \
 | tar -xz -C /opt/afni-latest --strip-components 1
 
 # Configure AFNI
-ENV AFNI_MODELPATH="/opt/afni-latest/models" \
-    AFNI_IMSAVE_WARNINGS="NO" \
-    AFNI_TTATLAS_DATASET="/usr/share/afni/atlases" \
-    AFNI_PLUGINPATH="/opt/afni-latest/plugins"
-
-ENV PATH="/opt/afni-latest/bin:$PATH"
+ENV PATH="$PATH:/opt/afni-latest" \
+    AFNI_INSTALLDIR=/opt/afni-latest \
+    AFNI_IMSAVE_WARNINGS=NO
 
 RUN echo "Downloading C3D ..." \
     && mkdir /opt/c3d \
@@ -170,7 +164,7 @@ RUN mkdir -p $ANTSPATH && \
     curl -sSL "https://github.com/ANTsX/ANTs/releases/download/v2.5.3/ants-2.5.3-ubuntu-22.04-X64-gcc.zip" -o /tmp/ants.zip && \
     unzip /tmp/ants.zip -d $ANTSPATH && \
     rm /tmp/ants.zip
-ENV PATH=$ANTSPATH:$PATH
+ENV PATH=/usr/lib/ants/ants-2.5.3/bin:$PATH
 
 # Install SVGO
 RUN npm install -g svgo
@@ -199,6 +193,10 @@ RUN python fetch_templates.py && \
     rm fetch_templates.py && \
     find $HOME/.cache/templateflow -type d -exec chmod go=u {} + && \
     find $HOME/.cache/templateflow -type f -exec chmod go=u {} +
+
+# Reformat AtlasPack into a BIDS dataset
+COPY scripts/fix_atlaspack.py fix_atlaspack.py
+RUN python fix_atlaspack.py && rm fix_atlaspack.py
 
 # Install pandoc (for HTML/LaTeX reports)
 RUN curl -o pandoc-2.2.2.1-1-amd64.deb -sSL "https://github.com/jgm/pandoc/releases/download/2.2.2.1/pandoc-2.2.2.1-1-amd64.deb" && \
