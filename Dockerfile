@@ -32,7 +32,7 @@ RUN apt-get update && \
         wget \
         xvfb \
         && \
-    curl -sSL https://deb.nodesource.com/setup_17.x | bash - && \
+    curl -sSL https://deb.nodesource.com/setup_21.x | bash - && \
     apt-get install -y --no-install-recommends \
         nodejs && \
     apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
