@@ -11,6 +11,13 @@ COPY --from=atlaspack /AtlasPack/tpl-MNI152NLin6Asym_*.nii.gz /AtlasPack/
 COPY --from=atlaspack /AtlasPack/atlas-4S*.tsv /AtlasPack/
 COPY --from=atlaspack /AtlasPack/*.json /AtlasPack/
 
+# Write dataset_description.json
+RUN echo '{' > /AtlasPack/dataset_description.json && \
+    echo '    "Name": "AtlasPack",' >> /AtlasPack/dataset_description.json && \
+    echo '    "BIDSVersion": "1.0.0",' >> /AtlasPack/dataset_description.json && \
+    echo '    "DatasetType": "atlas",' >> /AtlasPack/dataset_description.json && \
+    echo '}' >> /AtlasPack/dataset_description.json
+
 # Install basic libraries
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
