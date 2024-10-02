@@ -84,7 +84,7 @@ RUN curl -sSL "http://neuro.debian.net/lists/$( lsb_release -c | cut -f2 ).us-ca
 RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive \
     apt-get install -y --no-install-recommends \
-        afni=18.0.05+git24-gb25b21054~dfsg.1-1~nd17.10+1+nd18.04+1 \
+        afni \
         connectome-workbench \
         git-annex-standalone && \
     apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
