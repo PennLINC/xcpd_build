@@ -89,6 +89,7 @@ RUN apt-get update && \
     apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Install AFNI latest (neurodocker build)
+# Need to symlink libXpm.so.4.11.0 to libXp.so.6 because AFNI expects libXp.so.6.
 RUN apt-get update -qq \
 && apt-get install -y -q --no-install-recommends \
        apt-utils \
@@ -101,10 +102,12 @@ RUN apt-get update -qq \
        libgomp1 \
        libjpeg62 \
        libxm4 \
+       libxpm4 \
        netpbm \
        tcsh \
        xfonts-base \
        xvfb \
+&& ln -s /usr/lib/x86_64-linux-gnu/libXpm.so.4.11.0 /usr/lib/x86_64-linux-gnu/libXp.so.6 \
 && echo "Downloading AFNI ..." \
 && mkdir -p /opt/afni-latest \
 && curl -fsSL --retry 5 https://afni.nimh.nih.gov/pub/dist/tgz/linux_openmp_64.tgz \
@@ -144,6 +147,7 @@ COPY --from=build_fsl /usr/lib/fsl/5.0/libfslio.so /opt/fsl/lib/libfslio.so
 COPY --from=build_fsl /usr/lib/fsl/5.0/libutils.so /opt/fsl/lib/libutils.so
 COPY --from=build_fsl /usr/lib/fsl/5.0/libprob.so /opt/fsl/lib/libprob.so
 COPY --from=build_fsl /usr/lib/libnewmat.so.10.0.0 /opt/fsl/lib/libnewmat.so.10
+COPY --from=build_fsl /usr/lib/libniftiio.so.2 /opt/fsl/lib/libniftiio.so.2
 # Install applywarp from FSL for UK Biobank data
 COPY --from=build_fsl /usr/lib/fsl/5.0/applywarp /opt/fsl/lib/applywarp
 
