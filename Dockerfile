@@ -148,6 +148,7 @@ COPY --from=build_fsl /usr/lib/fsl/5.0/libutils.so /opt/fsl/lib/libutils.so
 COPY --from=build_fsl /usr/lib/fsl/5.0/libprob.so /opt/fsl/lib/libprob.so
 COPY --from=build_fsl /usr/lib/libnewmat.so.10.0.0 /opt/fsl/lib/libnewmat.so.10
 COPY --from=build_fsl /usr/lib/libniftiio.so.2 /opt/fsl/lib/libniftiio.so.2
+COPY --from=build_fsl /usr/lib/libznz.so.2 /opt/fsl/lib/libznz.so.2
 # Install applywarp from FSL for UK Biobank data
 COPY --from=build_fsl /usr/lib/fsl/5.0/applywarp /opt/fsl/lib/applywarp
 
