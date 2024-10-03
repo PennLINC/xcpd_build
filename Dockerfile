@@ -91,6 +91,7 @@ RUN apt-get update && \
 # Install AFNI latest (neurodocker build)
 # Need to symlink libXpm.so.4.11.0 (libxpm4) to libXp.so.6 for AFNI.
 # Need to symlink libpng16.so.16.37.0 (libpng16-16) to libpng12.so.0 for AFNI.
+# Need to symlink libgsl.so.23.0.0 (libgsl23) to libgsl.so.0 for AFNI.
 RUN apt-get update -qq \
 && apt-get install -y -q --no-install-recommends \
        apt-utils \
@@ -111,6 +112,7 @@ RUN apt-get update -qq \
        xvfb \
 && ln -s /usr/lib/x86_64-linux-gnu/libXpm.so.4.11.0 /usr/lib/x86_64-linux-gnu/libXp.so.6 \
 && ln -s /usr/lib/x86_64-linux-gnu/libpng16.so.16.37.0 /usr/lib/x86_64-linux-gnu/libpng12.so.0 \
+&& ln -s /usr/lib/x86_64-linux-gnu/libgsl.so.23.0.0 /usr/lib/x86_64-linux-gnu/libgsl.so.0 \
 && echo "Downloading AFNI ..." \
 && mkdir -p /opt/afni-latest \
 && curl -fsSL --retry 5 https://afni.nimh.nih.gov/pub/dist/tgz/linux_openmp_64.tgz \
