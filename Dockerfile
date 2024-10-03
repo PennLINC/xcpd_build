@@ -101,6 +101,7 @@ RUN apt-get update -qq \
        libgomp1 \
        libjpeg62 \
        libxm4 \
+       libxp6 \
        netpbm \
        tcsh \
        xfonts-base \
