@@ -102,7 +102,6 @@ RUN apt-get update -qq \
        libglu1-mesa-dev \
        libglw1-mesa \
        libgomp1 \
-       libgsl23 \
        libjpeg62 \
        libpng16-16 \
        libxm4 \
