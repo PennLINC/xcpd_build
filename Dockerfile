@@ -137,6 +137,7 @@ COPY --from=build_fsl /usr/share/fsl/5.0/bin/slicesdir /opt/fsl/bin/slicesdir
 COPY --from=build_fsl /usr/share/fsl/5.0/bin/pngappend /opt/fsl/bin/pngappend
 COPY --from=build_fsl /usr/share/fsl/5.0/bin/remove_ext /opt/fsl/bin/remove_ext
 # Shared libraries
+COPY --from=build_fsl /usr/lib/fsl/5.0/libniftiio.so.2 /opt/fsl/lib/libniftiio.so.2
 COPY --from=build_fsl /usr/lib/fsl/5.0/libnewimage.so /opt/fsl/lib/libnewimage.so
 COPY --from=build_fsl /usr/lib/fsl/5.0/libmiscmaths.so /opt/fsl/lib/libmiscmaths.so
 COPY --from=build_fsl /usr/lib/fsl/5.0/libmiscpic.so /opt/fsl/lib/libmiscpic.so
