@@ -208,6 +208,10 @@ RUN python fetch_templates.py && \
 COPY scripts/fix_atlaspack.py fix_atlaspack.py
 RUN python fix_atlaspack.py && rm fix_atlaspack.py
 
+# Make it ok for singularity on CentOS (from QSIPrep)
+RUN strip --remove-section=.note.ABI-tag /opt/qt512/lib/libQt5Core.so.5.12.8 \
+    && ldconfig
+
 # Install pandoc (for HTML/LaTeX reports)
 RUN curl -o pandoc-2.2.2.1-1-amd64.deb -sSL "https://github.com/jgm/pandoc/releases/download/2.2.2.1/pandoc-2.2.2.1-1-amd64.deb" && \
     dpkg -i pandoc-2.2.2.1-1-amd64.deb && \
