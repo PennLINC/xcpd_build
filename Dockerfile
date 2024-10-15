@@ -209,7 +209,7 @@ COPY scripts/fix_atlaspack.py fix_atlaspack.py
 RUN python fix_atlaspack.py && rm fix_atlaspack.py
 
 # Make it ok for singularity on CentOS (from QSIPrep)
-RUN strip --remove-section=.note.ABI-tag /usr/lib/x86_64-linux-gnu/libQt5Core.so.5 \
+RUN strip --remove-section=.note.ABI-tag /usr/lib/x86_64-linux-gnu/libQt5Core.so.5.15.3 \
     && ldconfig
 
 # Install pandoc (for HTML/LaTeX reports)
