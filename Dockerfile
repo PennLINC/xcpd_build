@@ -69,7 +69,7 @@ RUN conda install -y \
     pip install \
         matplotlib \
         requests \
-        templateflow ; \
+        templateflow>=25.0.1 ; \
     sync && \
     chmod -R a+rX /usr/local/miniconda; sync && \
     chmod +x /usr/local/miniconda/bin/*; sync && \
