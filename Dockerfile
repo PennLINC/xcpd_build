@@ -1,15 +1,7 @@
 FROM pennlinc/xcp_d:0.1.3 as build_fsl
-FROM pennlinc/atlaspack:0.1.0 as atlaspack
 FROM ubuntu:jammy-20240911.1
 
 COPY docker/files/neurodebian.gpg /usr/local/etc/neurodebian.gpg
-
-# Download atlases from AtlasPack
-RUN mkdir /AtlasPack
-COPY --from=atlaspack /AtlasPack/tpl-fsLR_*.dlabel.nii /AtlasPack/
-COPY --from=atlaspack /AtlasPack/tpl-MNI152NLin6Asym_*.nii.gz /AtlasPack/
-COPY --from=atlaspack /AtlasPack/atlas-4S*.tsv /AtlasPack/
-COPY --from=atlaspack /AtlasPack/*.json /AtlasPack/
 
 # Install basic libraries
 RUN apt-get update && \
@@ -204,9 +196,10 @@ RUN python fetch_templates.py && \
     find $HOME/.cache/templateflow -type d -exec chmod go=u {} + && \
     find $HOME/.cache/templateflow -type f -exec chmod go=u {} +
 
-# Reformat AtlasPack into a BIDS dataset
-COPY scripts/fix_atlaspack.py fix_atlaspack.py
-RUN python fix_atlaspack.py && rm fix_atlaspack.py
+# Download atlases from AtlasPack (stored in tar.gz file on Box)
+RUN curl -o AtlasPack.tar.gz -sSL "https://upenn.box.com/shared/static/0gxdoe77tuih5p9ainn4utdqj3kcq7p1.tar.gz" && \
+    tar -xzf AtlasPack.tar.gz -C /AtlasPack && \
+    rm AtlasPack.tar.gz
 
 # Make it ok for singularity on CentOS (from QSIPrep)
 RUN strip --remove-section=.note.ABI-tag /usr/lib/x86_64-linux-gnu/libQt5Core.so.5.15.3 \
