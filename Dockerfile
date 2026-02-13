@@ -198,7 +198,7 @@ RUN python fetch_templates.py && \
 
 # Download atlases from AtlasPack (stored in tar.gz file on Box)
 RUN curl -o AtlasPack.tar.gz -sSL "https://upenn.box.com/shared/static/0gxdoe77tuih5p9ainn4utdqj3kcq7p1.tar.gz" && \
-    tar -xzf AtlasPack.tar.gz -C /AtlasPack && \
+    tar -xzf AtlasPack.tar.gz && \
     rm AtlasPack.tar.gz
 
 # Make it ok for singularity on CentOS (from QSIPrep)
