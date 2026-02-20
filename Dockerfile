@@ -197,16 +197,19 @@ RUN python fetch_templates.py && \
     find $HOME/.cache/templateflow -type f -exec chmod go=u {} +
 
 # Download atlases from AtlasPack (stored in tar.gz file on Box)
-RUN curl -o AtlasPack.tar.gz -sSL "https://upenn.box.com/shared/static/0gxdoe77tuih5p9ainn4utdqj3kcq7p1.tar.gz" && \
+RUN mkdir -p $HOME/.cache/xcp_d && \
+    curl -o AtlasPack.tar.gz -sSL "https://upenn.box.com/shared/static/0gxdoe77tuih5p9ainn4utdqj3kcq7p1.tar.gz" && \
     tar -xzf AtlasPack.tar.gz && \
-    mv AtlasPack /AtlasPack && \
+    mv AtlasPack $HOME/.cache/xcp_d/AtlasPack && \
     rm AtlasPack.tar.gz
 
 # Download XCP-D atlases (stored in tar.gz file on Box)
 RUN curl -o XCPDAtlases.tar.gz -sSL "https://upenn.box.com/shared/static/4amxp72grenmp1up689k5oyn1i6nhunq.tar.gz" && \
     tar -xzf XCPDAtlases.tar.gz && \
-    mv XCPDAtlases /XCPDAtlases && \
-    rm XCPDAtlases.tar.gz
+    mv XCPDAtlases $HOME/.cache/xcp_d/XCPDAtlases && \
+    rm XCPDAtlases.tar.gz && \
+    find $HOME/.cache/xcp_d -type d -exec chmod go=u {} + && \
+    find $HOME/.cache/xcp_d -type f -exec chmod go=u {} +
 
 # Make it ok for singularity on CentOS (from QSIPrep)
 RUN strip --remove-section=.note.ABI-tag /usr/lib/x86_64-linux-gnu/libQt5Core.so.5.15.3 \
