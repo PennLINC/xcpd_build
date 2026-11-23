@@ -196,9 +196,11 @@ RUN python fetch_templates.py && \
     find $HOME/.cache/templateflow -type d -exec chmod go=u {} + && \
     find $HOME/.cache/templateflow -type f -exec chmod go=u {} +
 
-# Download atlases from AtlasPack (stored in tar.gz file on Box)
+# Download atlases from the AtlasPack GitHub release, checking the tarball
+# against the hash in the release's SHA256SUMS asset before extracting it
 RUN mkdir -p $HOME/.cache/xcp_d && \
-    curl -o AtlasPack.tar.gz -sSL "https://upenn.box.com/shared/static/0gxdoe77tuih5p9ainn4utdqj3kcq7p1.tar.gz" && \
+    curl -o AtlasPack.tar.gz -fsSL "https://github.com/PennLINC/AtlasPack/releases/download/0.2.0/atlaspack-0.2.0.tar.gz" && \
+    echo "c06657d97bfbf26bcb3cf36252c3086bd7441f8e633e1d7b2d8f1fbff1a27719  AtlasPack.tar.gz" | sha256sum -c - && \
     tar -xzf AtlasPack.tar.gz && \
     mv AtlasPack $HOME/.cache/xcp_d/AtlasPack && \
     rm AtlasPack.tar.gz
